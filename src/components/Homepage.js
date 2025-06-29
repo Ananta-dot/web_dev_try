@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
+import AuthModal from './AuthModal';
 
 const Homepage = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -8,6 +9,11 @@ const Homepage = () => {
   const handleShowAuth = (mode) => {
     setAuthMode(mode);
     setShowAuthModal(true);
+  };
+
+  const handleAuthSuccess = () => {
+    setShowAuthModal(false);
+    // The AppContent component will automatically show Dashboard when user is authenticated
   };
 
   return (
@@ -24,7 +30,7 @@ const Homepage = () => {
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-200 dark:text-gray-300 mb-8 leading-relaxed">
-            Profiles aren't just for jobs, welcome to a one stop platform for high school students to showcase their grades, 
+            The ultimate platform for high school students to showcase their grades, 
             extracurricular activities, achievements, and build a compelling profile 
             for college applications.
           </p>
@@ -102,11 +108,11 @@ const Homepage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">Random Number</div>
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">10,000+</div>
               <div className="text-gray-600 dark:text-gray-400">Students Helped</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">Random number</div>
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">500+</div>
               <div className="text-gray-600 dark:text-gray-400">College Acceptances</div>
             </div>
             <div>
@@ -145,43 +151,24 @@ const Homepage = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center mb-4 md:mb-0">
               <div className="h-8 w-8 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">LH</span>
+                <span className="text-white font-bold text-lg">HS</span>
               </div>
-              <span className="ml-2 text-xl font-bold">Name_Here</span>
+              <span className="ml-2 text-xl font-bold">ScholarConnect</span>
             </div>
             <div className="text-gray-400 dark:text-gray-500">
-              © 2025 Name_here. Empowering high school students.
+              © 2025 ScholarConnect. Empowering high school students.
             </div>
           </div>
         </div>
       </footer>
 
-      {/* Auth Modal */}
+      {/* Real Authentication Modal */}
       {showAuthModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md transition-colors duration-200">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {authMode === 'login' ? 'Welcome Back' : 'Create Account'}
-              </h3>
-              <button
-                onClick={() => setShowAuthModal(false)}
-                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
-              >
-                ✕
-              </button>
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Authentication will be implemented in the next phase!
-            </p>
-            <button
-              onClick={() => setShowAuthModal(false)}
-              className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg w-full transition duration-200"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <AuthModal 
+          mode={authMode} 
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={handleAuthSuccess}
+        />
       )}
     </div>
   );
