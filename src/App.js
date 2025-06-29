@@ -24,19 +24,19 @@ const AppContent = () => {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('profile_completed')
+        .select('profile_completed, first_name, last_name')
         .eq('id', user.id)
         .single();
 
       if (data) {
         setUserProfile(data);
+      } else if (error && error.code === 'PGRST116') {
+        // Profile doesn't exist, create one
+        await createUserProfile();
       }
     } catch (error) {
       console.error('Error fetching user profile:', error);
-      // If no profile exists yet, create one
-      if (error.code === 'PGRST116') {
-        await createUserProfile();
-      }
+      await createUserProfile();
     } finally {
       setProfileLoading(false);
     }
@@ -56,7 +56,7 @@ const AppContent = () => {
           }
         ]);
 
-      if (error && error.code !== '23505') { // Ignore duplicate key error
+      if (error && error.code !== '23505') {
         console.error('Error creating user profile:', error);
       }
       
@@ -86,8 +86,8 @@ const AppContent = () => {
     return <Homepage />;
   }
 
-  // Show profile details form if user hasn't completed their profile
-  if (user && !userProfile?.profile_completed) {
+  // Show profile details form ONLY if user hasn't completed their profile
+  if (user && userProfile && !userProfile.profile_completed) {
     return <ProfileDetailsForm onComplete={handleProfileComplete} />;
   }
 

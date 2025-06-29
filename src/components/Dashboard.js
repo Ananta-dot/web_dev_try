@@ -9,6 +9,7 @@ import GroupsList from './GroupsList';
 const Dashboard = () => {
   const { user, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState('feed');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
@@ -23,38 +24,78 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Navigation */}
-      <nav className="bg-white dark:bg-gray-800 shadow-sm border-b">
+      {/* Mobile-Optimized Navigation */}
+      <nav className="bg-white dark:bg-gray-800 shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">HS</span>
               </div>
-              <h1 className="ml-2 text-xl font-semibold text-gray-900 dark:text-white">
+              <h1 className="ml-2 text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                 ScholarConnect
               </h1>
             </div>
-            <div className="flex items-center space-x-4">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden sm:flex items-center space-x-4">
               <DarkModeToggle />
               <span className="text-sm text-gray-700 dark:text-gray-300">
                 Welcome, {user?.user_metadata?.first_name || 'Student'}!
               </span>
               <button
                 onClick={handleSignOut}
-                className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm"
+                className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm min-h-[44px]"
+              >
+                Sign Out
+              </button>
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="sm:hidden flex items-center space-x-2">
+              <DarkModeToggle />
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-gray-500 hover:text-gray-700 p-2 rounded-md min-h-[44px] min-w-[44px] flex items-center justify-center"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  {mobileMenuOpen ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  )}
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="sm:hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+            <div className="px-2 pt-2 pb-3">
+              <div className="text-sm text-gray-700 dark:text-gray-300 px-3 py-2">
+                Welcome, {user?.user_metadata?.first_name || 'Student'}!
+              </div>
+              <button
+                onClick={() => {
+                  handleSignOut();
+                  setMobileMenuOpen(false);
+                }}
+                className="block w-full text-left px-3 py-3 text-red-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md text-base font-medium min-h-[44px]"
               >
                 Sign Out
               </button>
             </div>
           </div>
-        </div>
+        )}
       </nav>
 
-      <div className="max-w-7xl mx-auto py-6 px-4">
-        {/* Tabs */}
-        <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
-          <nav className="-mb-px flex space-x-8">
+      <div className="max-w-7xl mx-auto py-4 sm:py-6 px-4">
+        {/* Mobile-First Tabs */}
+        <div className="border-b border-gray-200 dark:border-gray-700 mb-4 sm:mb-6">
+          {/* Mobile: Horizontal Scroll Tabs */}
+          <nav className="flex space-x-4 sm:space-x-8 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -63,20 +104,22 @@ const Dashboard = () => {
                   activeTab === tab.id
                     ? 'border-blue-500 text-blue-600 dark:text-blue-400'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-                } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2`}
+                } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200 min-h-[44px]`}
               >
-                <span>{tab.icon}</span>
-                <span>{tab.name}</span>
+                <span className="text-lg sm:text-base">{tab.icon}</span>
+                <span className="hidden xs:inline">{tab.name}</span>
               </button>
             ))}
           </nav>
         </div>
 
         {/* Tab Content */}
-        {activeTab === 'feed' && <Feed />}
-        {activeTab === 'profile' && <UserProfile />}
-        {activeTab === 'connections' && <ConnectionsList />}
-        {activeTab === 'groups' && <GroupsList />}
+        <div className="pb-4">
+          {activeTab === 'feed' && <Feed />}
+          {activeTab === 'profile' && <UserProfile />}
+          {activeTab === 'connections' && <ConnectionsList />}
+          {activeTab === 'groups' && <GroupsList />}
+        </div>
       </div>
     </div>
   );

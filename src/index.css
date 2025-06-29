@@ -10,4 +10,41 @@
   .btn-secondary {
     @apply bg-white hover:bg-gray-50 text-blue-600 font-semibold py-2 px-6 rounded-lg border border-blue-600 transition duration-200;
   }
+
+  /* Custom scrollbar hiding for mobile tabs */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Touch target improvements */
+  button, a, input, textarea, select {
+    min-height: 44px;
+  }
+
+  /* Better form controls on mobile */
+  input, textarea, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Custom responsive breakpoint */
+@media (min-width: 475px) {
+  .xs\:inline {
+    display: inline;
+  }
+}
+
+/* Prevent horizontal overflow */
+html {
+  overflow-x: hidden;
+}
+
+/* Better mobile tap highlights */
+* {
+  -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1);
 }

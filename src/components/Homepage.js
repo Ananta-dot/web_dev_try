@@ -11,163 +11,96 @@ const Homepage = () => {
     setShowAuthModal(true);
   };
 
-  const handleAuthSuccess = () => {
-    setShowAuthModal(false);
-    // The AppContent component will automatically show Dashboard when user is authenticated
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 dark:from-gray-900 dark:to-blue-900 flex flex-col transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
       <Navbar onShowAuth={handleShowAuth} />
       
-      {/* Hero Section */}
-      <div className="flex-grow flex items-center justify-center px-4 py-16">
+      {/* Hero Section - Fixed Dark Mode */}
+      <div className="flex-grow flex items-center justify-center px-4 py-8 sm:py-16">
         <div className="max-w-4xl text-center">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 sm:mb-6 leading-tight">
             Build Your{' '}
             <span className="text-yellow-400 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
               Academic Profile
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-200 dark:text-gray-300 mb-8 leading-relaxed">
-            The ultimate platform for high school students to showcase their grades, 
-            extracurricular activities, achievements, and build a compelling profile 
-            for college applications.
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-200 dark:text-gray-300 mb-6 sm:mb-8 leading-relaxed px-2">
+            The ultimate platform for high school students to showcase their achievements
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          
+          {/* Mobile-Optimized Buttons */}
+          <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4 sm:justify-center">
             <button
-              onClick={() => handleShowAuth('signup')}
-              className="bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600 text-blue-900 dark:text-gray-900 font-bold py-4 px-8 rounded-lg text-lg transition duration-200 transform hover:scale-105"
+              onClick={() => handleShowAuth('register')}
+              className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600 text-blue-900 dark:text-gray-900 font-bold py-4 px-6 sm:px-8 rounded-lg text-lg transition duration-200 transform hover:scale-105 min-h-[44px]"
             >
               Get Started Free
             </button>
             <button
               onClick={() => handleShowAuth('login')}
-              className="bg-white/10 hover:bg-white/20 dark:bg-white/20 dark:hover:bg-white/30 backdrop-blur-sm border border-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg transition duration-200"
+              className="w-full sm:w-auto bg-white/10 hover:bg-white/20 dark:bg-white/20 dark:hover:bg-white/30 backdrop-blur-sm border border-white/20 text-white font-semibold py-4 px-6 sm:px-8 rounded-lg text-lg transition duration-200 min-h-[44px]"
             >
-              Already have an account?
+              Sign In
             </button>
           </div>
         </div>
       </div>
 
-      {/* Features Section */}
-      <div className="bg-white dark:bg-gray-900 py-16 transition-colors duration-300">
+      {/* Features Section - Fixed Dark Mode */}
+      <div className="bg-white dark:bg-gray-900 py-12 sm:py-16 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h2 className="text-base text-blue-600 dark:text-blue-400 font-semibold tracking-wide uppercase mb-2">
               Features
             </h2>
-            <h3 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
               Everything you need for college applications
             </h3>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto px-4">
               Organize your high school journey and stand out to college admissions officers
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center group">
-              <div className="flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 text-white mx-auto mb-6 group-hover:scale-110 transition duration-200">
+          {/* Mobile-First Grid - Fixed Dark Mode */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="text-center group p-4">
+              <div className="flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 text-white mx-auto mb-4 group-hover:scale-110 transition duration-200">
                 <span role="img" aria-label="chart" className="text-2xl">📊</span>
               </div>
-              <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Grade Tracking</h4>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                Keep track of your GPA, course grades, and academic progress throughout high school. 
-                Visualize your improvement over time.
+              <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3">Grade Tracking</h4>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base">
+                Keep track of your GPA, course grades, and academic progress throughout high school.
               </p>
             </div>
 
-            <div className="text-center group">
-              <div className="flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 text-white mx-auto mb-6 group-hover:scale-110 transition duration-200">
+            <div className="text-center group p-4">
+              <div className="flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 text-white mx-auto mb-4 group-hover:scale-110 transition duration-200">
                 <span role="img" aria-label="trophy" className="text-2xl">🏆</span>
               </div>
-              <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Achievements</h4>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                Showcase your awards, honors, and notable accomplishments. 
-                Create a comprehensive record of your successes.
+              <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3">Achievements</h4>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base">
+                Showcase your awards, honors, and notable accomplishments.
               </p>
             </div>
 
-            <div className="text-center group">
-              <div className="flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-r from-green-500 to-green-600 dark:from-green-400 dark:to-green-500 text-white mx-auto mb-6 group-hover:scale-110 transition duration-200">
+            <div className="text-center group p-4 sm:col-span-2 lg:col-span-1">
+              <div className="flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-r from-green-500 to-green-600 dark:from-green-400 dark:to-green-500 text-white mx-auto mb-4 group-hover:scale-110 transition duration-200">
                 <span role="img" aria-label="theater" className="text-2xl">🎭</span>
               </div>
-              <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Extracurriculars</h4>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                Document your clubs, sports, volunteer work, and leadership experiences. 
-                Show colleges who you are beyond grades.
+              <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3">Extracurriculars</h4>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base">
+                Document your clubs, sports, volunteer work, and leadership experiences.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="bg-gray-50 dark:bg-gray-800 py-16 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">10,000+</div>
-              <div className="text-gray-600 dark:text-gray-400">Students Helped</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">500+</div>
-              <div className="text-gray-600 dark:text-gray-400">College Acceptances</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">4.9</div>
-              <div className="text-gray-600 dark:text-gray-400">Average Rating</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">Free</div>
-              <div className="text-gray-600 dark:text-gray-400">Always</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="bg-blue-900 dark:bg-gray-900 py-16 transition-colors duration-300">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h3 className="text-3xl font-bold text-white mb-4">
-            Ready to build your future?
-          </h3>
-          <p className="text-xl text-blue-200 dark:text-gray-300 mb-8">
-            Join thousands of students who are already preparing for college success.
-          </p>
-          <button
-            onClick={() => handleShowAuth('signup')}
-            className="bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600 text-blue-900 dark:text-gray-900 font-bold py-4 px-8 rounded-lg text-lg transition duration-200 transform hover:scale-105"
-          >
-            Start Building Your Profile
-          </button>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 dark:bg-black text-white py-8 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center mb-4 md:mb-0">
-              <div className="h-8 w-8 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">HS</span>
-              </div>
-              <span className="ml-2 text-xl font-bold">Name_here</span>
-            </div>
-            <div className="text-gray-400 dark:text-gray-500">
-              © 2025 Name_here. Empowering high school students.
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      {/* Real Authentication Modal */}
       {showAuthModal && (
         <AuthModal 
           mode={authMode} 
           onClose={() => setShowAuthModal(false)}
-          onSuccess={handleAuthSuccess}
+          onSuccess={() => setShowAuthModal(false)}
         />
       )}
     </div>

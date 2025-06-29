@@ -12,19 +12,26 @@ export const useDarkMode = () => {
 
 export const DarkModeProvider = ({ children }) => {
   const [isDark, setIsDark] = useState(() => {
+    // Check localStorage first
     const saved = localStorage.getItem('darkMode');
     if (saved !== null) {
       return JSON.parse(saved);
     }
+    // Then check system preference
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
   useEffect(() => {
+    // Apply dark class to HTML element (this is crucial!)
+    const htmlElement = document.documentElement;
+    
     if (isDark) {
-      document.documentElement.classList.add('dark');
+      htmlElement.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      htmlElement.classList.remove('dark');
     }
+    
+    // Save to localStorage
     localStorage.setItem('darkMode', JSON.stringify(isDark));
   }, [isDark]);
 

@@ -13,6 +13,13 @@ const AuthModal = ({ mode, onClose, onSuccess }) => {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
+  const getRedirectUrl = () => {
+    if (window.location.hostname === 'localhost') {
+      return 'http://localhost:3000';
+    }
+    return window.location.origin;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -41,7 +48,8 @@ const AuthModal = ({ mode, onClose, onSuccess }) => {
             data: {
               first_name: formData.firstName,
               last_name: formData.lastName,
-            }
+            },
+            emailRedirectTo: getRedirectUrl()
           }
         });
       }
@@ -53,7 +61,23 @@ const AuthModal = ({ mode, onClose, onSuccess }) => {
           onSuccess();
           onClose();
         } else {
-          setMessage('Registration successful! Please check your email for a verification link.');
+          // Check for duplicate signup (user exists but with empty identities)
+          const isExistingUser = result.data.user && 
+                                result.data.user.identities && 
+                                result.data.user.identities.length === 0;
+          
+          if (isExistingUser) {
+            setError('An account with this email already exists. Try signing in instead.');
+          } else {
+            setMessage('Account created successfully! Please check your email to verify your account, then sign in.');
+            setFormData({
+              firstName: '',
+              lastName: '',
+              email: '',
+              password: '',
+              confirmPassword: ''
+            });
+          }
         }
       }
     } catch (error) {
@@ -62,6 +86,23 @@ const AuthModal = ({ mode, onClose, onSuccess }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const switchToLogin = () => {
+    setError('');
+    setMessage('');
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: formData.email, // Keep email for convenience
+      password: '',
+      confirmPassword: ''
+    });
+    // Trigger mode switch through parent component
+    onClose();
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('switchToLogin', { detail: formData.email }));
+    }, 100);
   };
 
   return (
@@ -75,13 +116,23 @@ const AuthModal = ({ mode, onClose, onSuccess }) => {
         </div>
 
         {error && (
-          <div className="mb-4 p-3 text-red-700 bg-red-100 rounded-md text-sm">
+          <div className="mb-4 p-3 text-red-700 bg-red-100 dark:bg-red-900 dark:text-red-200 rounded-md text-sm">
             {error}
+            {error.includes('already exists') && (
+              <div className="mt-2">
+                <button
+                  onClick={switchToLogin}
+                  className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                >
+                  Click here to sign in instead
+                </button>
+              </div>
+            )}
           </div>
         )}
 
         {message && (
-          <div className="mb-4 p-3 text-green-700 bg-green-100 rounded-md text-sm">
+          <div className="mb-4 p-3 text-green-700 bg-green-100 dark:bg-green-900 dark:text-green-200 rounded-md text-sm">
             {message}
           </div>
         )}
@@ -94,7 +145,7 @@ const AuthModal = ({ mode, onClose, onSuccess }) => {
                 placeholder="First Name"
                 value={formData.firstName}
                 onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                className="p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:text-white"
+                className="p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
                 required
               />
               <input
@@ -102,7 +153,7 @@ const AuthModal = ({ mode, onClose, onSuccess }) => {
                 placeholder="Last Name"
                 value={formData.lastName}
                 onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                className="p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:text-white"
+                className="p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
                 required
               />
             </div>
@@ -113,7 +164,7 @@ const AuthModal = ({ mode, onClose, onSuccess }) => {
             placeholder="Email"
             value={formData.email}
             onChange={(e) => setFormData({...formData, email: e.target.value})}
-            className="w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:text-white"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
             required
           />
 
@@ -122,7 +173,7 @@ const AuthModal = ({ mode, onClose, onSuccess }) => {
             placeholder="Password"
             value={formData.password}
             onChange={(e) => setFormData({...formData, password: e.target.value})}
-            className="w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:text-white"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
             required
           />
 
@@ -132,7 +183,7 @@ const AuthModal = ({ mode, onClose, onSuccess }) => {
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-              className="w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:text-white"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
               required
             />
           )}
@@ -145,6 +196,15 @@ const AuthModal = ({ mode, onClose, onSuccess }) => {
             {loading ? 'Loading...' : (mode === 'login' ? 'Sign In' : 'Create Account')}
           </button>
         </form>
+
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => window.location.href = mode === 'login' ? '#register' : '#login'}
+            className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+          >
+            {mode === 'login' ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+          </button>
+        </div>
       </div>
     </div>
   );

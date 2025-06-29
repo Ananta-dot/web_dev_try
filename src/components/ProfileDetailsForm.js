@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import ProfilePictureUpload from './ProfilePictureUpload';
 
-const ProfileDetailsForm = ({ onComplete }) => {
+const ProfileDetailsForm = ({ onComplete, allowSkip = true }) => {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     firstName: user?.user_metadata?.first_name || '',
     lastName: user?.user_metadata?.last_name || '',
     age: '',
     schoolName: '',
-    graduationYear: ''
+    graduationYear: '',
+    profilePictureUrl: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -17,6 +19,10 @@ const ProfileDetailsForm = ({ onComplete }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleAvatarUpload = (filePath) => {
+    setFormData({ ...formData, profilePictureUrl: filePath });
   };
 
   const handleSubmit = async (e) => {
@@ -31,6 +37,7 @@ const ProfileDetailsForm = ({ onComplete }) => {
         age: formData.age ? parseInt(formData.age) : null,
         school_name: formData.schoolName,
         graduation_year: formData.graduationYear ? parseInt(formData.graduationYear) : null,
+        profile_picture_url: formData.profilePictureUrl,
         profile_completed: true
       };
 
@@ -51,6 +58,27 @@ const ProfileDetailsForm = ({ onComplete }) => {
     }
   };
 
+  const handleSkip = async () => {
+    try {
+      setLoading(true);
+      // Mark profile as "skipped" but allow access to dashboard
+      const { error } = await supabase
+        .from('users')
+        .update({ 
+          profile_completed: true, // Allow dashboard access
+          profile_skipped: true    // Track that it was skipped
+        })
+        .eq('id', user.id);
+
+      if (error) throw error;
+      onComplete();
+    } catch (err) {
+      setError('Failed to skip setup.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-md w-full">
@@ -62,8 +90,22 @@ const ProfileDetailsForm = ({ onComplete }) => {
             Complete Your Profile
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
-            Just a few more details to get started
+            Help others get to know you better
           </p>
+          {allowSkip && (
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              You can always complete this later
+            </p>
+          )}
+        </div>
+
+        {/* Profile Picture Upload */}
+        <div className="mb-6">
+          <ProfilePictureUpload
+            currentUrl={formData.profilePictureUrl}
+            onUpload={handleAvatarUpload}
+            size={120}
+          />
         </div>
 
         {error && (
@@ -149,18 +191,32 @@ const ProfileDetailsForm = ({ onComplete }) => {
             </select>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading || !formData.firstName || !formData.lastName}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed mt-6"
-          >
-            {loading ? 'Saving...' : 'Save & Continue'}
-          </button>
+          {/* Button Group */}
+          <div className="space-y-3 mt-6">
+            <button
+              type="submit"
+              disabled={loading || !formData.firstName || !formData.lastName}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Saving...' : 'Save & Continue'}
+            </button>
+            
+            {allowSkip && (
+              <button
+                type="button"
+                onClick={handleSkip}
+                disabled={loading}
+                className="w-full bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200 font-semibold py-3 rounded-lg transition duration-200 disabled:opacity-50"
+              >
+                {loading ? 'Skipping...' : 'Skip for Now'}
+              </button>
+            )}
+          </div>
         </form>
 
         <div className="mt-4 text-center">
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            You can update these details later in your profile settings
+            You can update these details anytime in your profile settings
           </p>
         </div>
       </div>
