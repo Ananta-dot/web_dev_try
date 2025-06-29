@@ -23,7 +23,10 @@ const CreatePost = ({ onPostCreated }) => {
             visibility: 'public'
           }
         ])
-        .select('*')
+        .select(`
+          *,
+          users(first_name, last_name, profile_picture_url)
+        `)
         .single();
 
       if (error) throw error;
@@ -32,6 +35,7 @@ const CreatePost = ({ onPostCreated }) => {
       if (onPostCreated) onPostCreated(data);
     } catch (error) {
       console.error('Error creating post:', error);
+      alert('Failed to create post. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -49,7 +53,7 @@ const CreatePost = ({ onPostCreated }) => {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="What's on your mind?"
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg resize-none dark:bg-gray-700 dark:text-white text-base"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg resize-none dark:bg-gray-700 dark:text-white text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               rows="3"
               maxLength="500"
             />

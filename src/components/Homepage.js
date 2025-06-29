@@ -11,6 +11,14 @@ const Homepage = () => {
     setShowAuthModal(true);
   };
 
+  const handleAuthSuccess = () => {
+    setShowAuthModal(false);
+  };
+
+  const handleModeChange = (newMode) => {
+    setAuthMode(newMode);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
       <Navbar onShowAuth={handleShowAuth} />
@@ -98,9 +106,10 @@ const Homepage = () => {
 
       {showAuthModal && (
         <AuthModal 
-          mode={authMode} 
+          mode={authMode}
           onClose={() => setShowAuthModal(false)}
-          onSuccess={() => setShowAuthModal(false)}
+          onSuccess={handleAuthSuccess}
+          onModeChange={handleModeChange}
         />
       )}
     </div>
