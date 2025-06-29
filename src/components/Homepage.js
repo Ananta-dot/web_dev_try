@@ -102,11 +102,11 @@ const Homepage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">10,000+</div>
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">Random Number</div>
               <div className="text-gray-600 dark:text-gray-400">Students Helped</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">500+</div>
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">Random number</div>
               <div className="text-gray-600 dark:text-gray-400">College Acceptances</div>
             </div>
             <div>
