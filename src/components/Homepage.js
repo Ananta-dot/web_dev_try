@@ -153,10 +153,10 @@ const Homepage = () => {
               <div className="h-8 w-8 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">HS</span>
               </div>
-              <span className="ml-2 text-xl font-bold">ScholarConnect</span>
+              <span className="ml-2 text-xl font-bold">Name_here</span>
             </div>
             <div className="text-gray-400 dark:text-gray-500">
-              © 2025 ScholarConnect. Empowering high school students.
+              © 2025 Name_here. Empowering high school students.
             </div>
           </div>
         </div>
