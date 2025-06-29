@@ -19,14 +19,20 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Get initial session
     const getSession = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (error) {
-        console.error('Error getting session:', error);
-      } else {
-        setSession(session);
-        setUser(session?.user ?? null);
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) {
+          console.error('Error getting session:', error);
+        } else {
+          console.log('Initial session:', session?.user?.email || 'No user');
+          setSession(session);
+          setUser(session?.user ?? null);
+        }
+      } catch (error) {
+        console.error('Session error:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     getSession();
@@ -34,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('Auth state changed:', event, session?.user?.id);
+        console.log('Auth state changed:', event, session?.user?.email || 'No user');
         
         setSession(session);
         setUser(session?.user ?? null);
@@ -46,16 +52,18 @@ export const AuthProvider = ({ children }) => {
             console.log('User signed in:', session?.user?.email);
             break;
           case 'SIGNED_OUT':
-            console.log('User signed out');
-            break;
-          case 'PASSWORD_RECOVERY':
-            console.log('Password recovery initiated');
+            console.log('User signed out, clearing state and redirecting');
+            setUser(null);
+            setSession(null);
+            // Clear any additional local storage if needed
+            localStorage.removeItem('supabase.auth.token');
+            // Force redirect to homepage
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 100);
             break;
           case 'TOKEN_REFRESHED':
             console.log('Token refreshed');
-            break;
-          case 'USER_UPDATED':
-            console.log('User updated');
             break;
           default:
             break;
@@ -81,17 +89,13 @@ export const AuthProvider = ({ children }) => {
             parent_email: userData.parent_email || null,
             school_name: userData.school_name || '',
             graduation_year: userData.graduation_year || null,
-            bio: userData.bio || '',
-            subjects: userData.subjects || [],
-            extracurriculars: userData.extracurriculars || [],
-            achievements: userData.achievements || []
+            bio: userData.bio || ''
           },
-          emailRedirectTo: `${window.location.origin}/verify-email`
+          emailRedirectTo: `${window.location.origin}`
         }
       });
 
       if (error) throw error;
-
       return { data, error: null };
     } catch (error) {
       console.error('Error signing up:', error);
@@ -108,7 +112,6 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (error) throw error;
-
       return { data, error: null };
     } catch (error) {
       console.error('Error signing in:', error);
@@ -116,17 +119,92 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Sign out
+  // Sign out - Multiple approaches for reliability
   const signOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-
+      console.log('Starting signout process...');
+      
+      // Method 1: Try global signout first
+      const { error: globalError } = await supabase.auth.signOut({ scope: 'global' });
+      
+      if (globalError) {
+        console.warn('Global signout failed, trying local signout:', globalError);
+        
+        // Method 2: Try local signout
+        const { error: localError } = await supabase.auth.signOut({ scope: 'local' });
+        
+        if (localError) {
+          console.error('Local signout also failed:', localError);
+          
+          // Method 3: Force signout by clearing everything manually
+          console.log('Forcing manual signout...');
+          
+          // Clear all possible storage
+          localStorage.clear();
+          sessionStorage.clear();
+          
+          // Clear Supabase specific items
+          const keys = Object.keys(localStorage);
+          keys.forEach(key => {
+            if (key.startsWith('supabase') || key.startsWith('sb-')) {
+              localStorage.removeItem(key);
+            }
+          });
+          
+          // Update state manually
+          setUser(null);
+          setSession(null);
+          
+          // Force redirect
+          window.location.href = '/';
+          
+          return { error: null };
+        }
+      }
+      
+      console.log('Signout successful');
       return { error: null };
+      
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('Signout error:', error);
+      
+      // Even if there's an error, try to clear local state and redirect
+      console.log('Signout failed, but clearing local state anyway...');
+      
+      // Clear storage
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // Update state
+      setUser(null);
+      setSession(null);
+      
+      // Force redirect
+      window.location.href = '/';
+      
       return { error };
     }
+  };
+
+  // Force signout - Nuclear option
+  const forceSignOut = () => {
+    console.log('Force signout initiated...');
+    
+    // Clear all storage
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Clear cookies (if any)
+    document.cookie.split(";").forEach(function(c) { 
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+    });
+    
+    // Update state
+    setUser(null);
+    setSession(null);
+    
+    // Force page reload to ensure clean state
+    window.location.href = '/';
   };
 
   // Resend verification email
@@ -141,12 +219,11 @@ export const AuthProvider = ({ children }) => {
         type: 'signup',
         email: emailToUse,
         options: {
-          emailRedirectTo: `${window.location.origin}/verify-email`
+          emailRedirectTo: `${window.location.origin}`
         }
       });
 
       if (error) throw error;
-
       return { error: null };
     } catch (error) {
       console.error('Error resending verification:', error);
@@ -154,179 +231,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Reset password
-  const resetPassword = async (email) => {
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`
-      });
-
-      if (error) throw error;
-
-      return { error: null };
-    } catch (error) {
-      console.error('Error resetting password:', error);
-      return { error };
-    }
-  };
-
-  // Update password
-  const updatePassword = async (newPassword) => {
-    try {
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword
-      });
-
-      if (error) throw error;
-
-      return { error: null };
-    } catch (error) {
-      console.error('Error updating password:', error);
-      return { error };
-    }
-  };
-
-  // Update user metadata
-  const updateUserMetadata = async (metadata) => {
-    try {
-      const { data, error } = await supabase.auth.updateUser({
-        data: metadata
-      });
-
-      if (error) throw error;
-
-      return { data, error: null };
-    } catch (error) {
-      console.error('Error updating user metadata:', error);
-      return { data: null, error };
-    }
-  };
-
-  // Check if profile is complete
-  const checkProfileComplete = async (userId = null) => {
-    try {
-      const userIdToCheck = userId || user?.id;
-      if (!userIdToCheck) return false;
-
-      const { data, error } = await supabase
-        .from('users')
-        .select('profile_completed, onboarding_step')
-        .eq('id', userIdToCheck)
-        .single();
-
-      if (error) {
-        console.error('Error checking profile completion:', error);
-        return false;
-      }
-
-      return data?.profile_completed || false;
-    } catch (error) {
-      console.error('Error checking profile completion:', error);
-      return false;
-    }
-  };
-
-  // Get user profile from database
-  const getUserProfile = async (userId = null) => {
-    try {
-      const userIdToCheck = userId || user?.id;
-      if (!userIdToCheck) return null;
-
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', userIdToCheck)
-        .single();
-
-      if (error) {
-        console.error('Error fetching user profile:', error);
-        return null;
-      }
-
-      return data;
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-      return null;
-    }
-  };
-
-  // Update user profile in database
-  const updateUserProfile = async (updates, userId = null) => {
-    try {
-      const userIdToUpdate = userId || user?.id;
-      if (!userIdToUpdate) {
-        throw new Error('No user ID provided');
-      }
-
-      const { data, error } = await supabase
-        .from('users')
-        .update(updates)
-        .eq('id', userIdToUpdate)
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      return { data, error: null };
-    } catch (error) {
-      console.error('Error updating user profile:', error);
-      return { data: null, error };
-    }
-  };
-
-  // Check if user is verified (email confirmed)
+  // Check if user is verified
   const isUserVerified = () => {
     return user?.email_confirmed_at !== null;
   };
 
-  // Check if user needs parental consent (under 16)
-  const needsParentalConsent = async () => {
-    try {
-      if (!user?.id) return false;
-
-      const profile = await getUserProfile();
-      return profile?.age && profile.age < 16;
-    } catch (error) {
-      console.error('Error checking parental consent requirement:', error);
-      return false;
-    }
-  };
-
-  // Get user's age-appropriate restrictions
-  const getAgeRestrictions = async () => {
-    try {
-      if (!user?.id) return null;
-
-      const profile = await getUserProfile();
-      if (!profile?.age) return null;
-
-      return {
-        canMessage: profile.age >= 13,
-        maxConnections: profile.age < 16 ? 50 : 500,
-        needsParentalConsent: profile.age < 16,
-        canJoinGroups: profile.age >= 12,
-        maxGroupsPerMonth: profile.age < 16 ? 3 : 10
-      };
-    } catch (error) {
-      console.error('Error getting age restrictions:', error);
-      return null;
-    }
-  };
-
-  // Refresh user session
-  const refreshSession = async () => {
-    try {
-      const { data, error } = await supabase.auth.refreshSession();
-      if (error) throw error;
-
-      return { data, error: null };
-    } catch (error) {
-      console.error('Error refreshing session:', error);
-      return { data: null, error };
-    }
-  };
-
-  // Helper function to get user's display name
+  // Get user's display name
   const getUserDisplayName = () => {
     if (!user) return '';
     
@@ -335,11 +245,6 @@ export const AuthProvider = ({ children }) => {
     const lastName = metadata.last_name || '';
     
     return `${firstName} ${lastName}`.trim() || user.email || 'User';
-  };
-
-  // Helper function to get user's role
-  const getUserRole = () => {
-    return user?.user_metadata?.user_type || 'student';
   };
 
   const value = {
@@ -352,29 +257,14 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signIn,
     signOut,
+    forceSignOut, // Nuclear option
     
     // Email verification
     resendVerification,
     isUserVerified,
     
-    // Password management
-    resetPassword,
-    updatePassword,
-    
-    // Profile management
-    checkProfileComplete,
-    getUserProfile,
-    updateUserProfile,
-    updateUserMetadata,
-    
-    // Age-based features
-    needsParentalConsent,
-    getAgeRestrictions,
-    
     // Utility methods
-    refreshSession,
     getUserDisplayName,
-    getUserRole,
   };
 
   return (

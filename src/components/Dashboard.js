@@ -7,12 +7,47 @@ import ConnectionsList from './ConnectionsList';
 import GroupsList from './GroupsList';
 
 const Dashboard = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, forceSignOut } = useAuth();
   const [activeTab, setActiveTab] = useState('feed');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
 
   const handleSignOut = async () => {
-    await signOut();
+    if (signingOut) return; // Prevent multiple clicks
+    
+    try {
+      setSigningOut(true);
+      console.log('User initiated signout...');
+      
+      const { error } = await signOut();
+      
+      if (error) {
+        console.error('Signout failed:', error);
+        
+        // Ask user if they want to force signout
+        const forceLogout = window.confirm(
+          'Normal signout failed. Would you like to force logout? This will clear all data and redirect you to the homepage.'
+        );
+        
+        if (forceLogout) {
+          forceSignOut();
+        }
+      }
+      
+    } catch (error) {
+      console.error('Signout error:', error);
+      
+      // Offer force signout option
+      const forceLogout = window.confirm(
+        'Signout encountered an error. Would you like to force logout?'
+      );
+      
+      if (forceLogout) {
+        forceSignOut();
+      }
+    } finally {
+      setSigningOut(false);
+    }
   };
 
   const tabs = [
@@ -24,13 +59,13 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Mobile-Optimized Navigation */}
+      {/* Navigation */}
       <nav className="bg-white dark:bg-gray-800 shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">HS</span>
+                <span className="text-white font-bold text-lg">SC</span>
               </div>
               <h1 className="ml-2 text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                 ScholarConnect
@@ -45,9 +80,10 @@ const Dashboard = () => {
               </span>
               <button
                 onClick={handleSignOut}
-                className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm min-h-[44px]"
+                disabled={signingOut}
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium transition duration-200 disabled:opacity-50 min-h-[44px] flex items-center"
               >
-                Sign Out
+                {signingOut ? 'Signing Out...' : 'Sign Out'}
               </button>
             </div>
 
@@ -82,9 +118,10 @@ const Dashboard = () => {
                   handleSignOut();
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-left px-3 py-3 text-red-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md text-base font-medium min-h-[44px]"
+                disabled={signingOut}
+                className="block w-full text-left px-3 py-3 text-red-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md text-base font-medium min-h-[44px] disabled:opacity-50"
               >
-                Sign Out
+                {signingOut ? 'Signing Out...' : 'Sign Out'}
               </button>
             </div>
           </div>
@@ -92,9 +129,8 @@ const Dashboard = () => {
       </nav>
 
       <div className="max-w-7xl mx-auto py-4 sm:py-6 px-4">
-        {/* Mobile-First Tabs */}
+        {/* Tabs */}
         <div className="border-b border-gray-200 dark:border-gray-700 mb-4 sm:mb-6">
-          {/* Mobile: Horizontal Scroll Tabs */}
           <nav className="flex space-x-4 sm:space-x-8 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
             {tabs.map((tab) => (
               <button
