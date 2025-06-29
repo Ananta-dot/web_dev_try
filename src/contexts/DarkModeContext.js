@@ -12,7 +12,6 @@ export const useDarkMode = () => {
 
 export const DarkModeProvider = ({ children }) => {
   const [isDark, setIsDark] = useState(() => {
-    // Check localStorage or system preference
     const saved = localStorage.getItem('darkMode');
     if (saved !== null) {
       return JSON.parse(saved);
@@ -21,7 +20,6 @@ export const DarkModeProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    // Update HTML class and localStorage
     if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
