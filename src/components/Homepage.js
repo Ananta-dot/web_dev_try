@@ -23,194 +23,205 @@ const Homepage = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
       <Navbar onShowAuth={handleShowAuth} />
       
-      {/* Hero Section - Professional Networking Focus */}
+      {/* Hero Section - Infrastructure Layer Focus */}
       <div className="flex-grow flex items-center justify-center px-4 py-8 sm:py-16">
-        <div className="max-w-4xl text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 sm:mb-6 leading-tight">
-            Professional Networking{' '}
-            <span className="text-yellow-400 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-              for Students
+        <div className="max-w-5xl text-center">
+          <div className="mb-6">
+            <span className="inline-block px-4 py-2 bg-yellow-400/20 text-yellow-200 rounded-full text-sm font-medium mb-4">
+              Building the Future of Teen Education
             </span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 sm:mb-6 leading-tight">
+            The Infrastructure Layer for{' '}
+            <span className="text-yellow-400 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+              Peer-Led, Mentor-Driven
+            </span>
+            {' '}Education
           </h1>
-          <p className="text-lg sm:text-xl md:text-2xl text-gray-200 dark:text-gray-300 mb-6 sm:mb-8 leading-relaxed px-2">
-            Connect with mentors, build your career network, and get guidance for your educational journey. LinkedIn for the next generation.
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-200 dark:text-gray-300 mb-8 leading-relaxed px-2 max-w-4xl mx-auto">
+            We're building the foundational technology that powers the next generation of learning networks—where teens learn from peers, grow with mentors, and shape their own educational journey.
           </p>
           
-          {/* Professional-focused Buttons */}
+          {/* Infrastructure-focused Buttons */}
           <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4 sm:justify-center">
             <button
               onClick={() => handleShowAuth('register')}
               className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600 text-blue-900 dark:text-gray-900 font-bold py-4 px-6 sm:px-8 rounded-lg text-lg transition duration-200 transform hover:scale-105 min-h-[44px]"
             >
-              Start Your Professional Journey
+              Join the Network
             </button>
             <button
               onClick={() => handleShowAuth('login')}
               className="w-full sm:w-auto bg-white/10 hover:bg-white/20 dark:bg-white/20 dark:hover:bg-white/30 backdrop-blur-sm border border-white/20 text-white font-semibold py-4 px-6 sm:px-8 rounded-lg text-lg transition duration-200 min-h-[44px]"
             >
-              Already a member? Sign In
+              Access Platform
             </button>
           </div>
         </div>
       </div>
 
-      {/* Features Section - Professional Networking Focus */}
+      {/* Infrastructure Vision Section */}
       <div className="bg-white dark:bg-gray-900 py-12 sm:py-16 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-base text-blue-600 dark:text-blue-400 font-semibold tracking-wide uppercase mb-2">
-              Professional Development
+              Infrastructure for Tomorrow
             </h2>
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
-              Build your career mindset early
+              Powering the future of teen learning networks
             </h3>
             <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto px-4">
-              Connect with industry experts, get career guidance, and build meaningful professional relationships
+              We provide the foundational technology that enables authentic peer-to-peer learning and meaningful mentor relationships
             </p>
           </div>
 
-          {/* Updated Feature Grid - Professional Focus */}
+          {/* Infrastructure Pillars */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <div className="text-center group p-4">
+            <div className="text-center group p-6 bg-gray-50 dark:bg-gray-800 rounded-xl hover:shadow-lg transition duration-300">
               <div className="flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 text-white mx-auto mb-4 group-hover:scale-110 transition duration-200">
                 <span role="img" aria-label="network" className="text-2xl">🌐</span>
               </div>
-              <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3">Professional Networking</h4>
+              <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3">Peer Learning Networks</h4>
               <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base">
-                Connect with teachers, mentors, and industry professionals to build your career network early.
+                Advanced algorithms connect teens with compatible learning partners and study groups based on shared interests and complementary skills.
               </p>
             </div>
 
-            <div className="text-center group p-4">
+            <div className="text-center group p-6 bg-gray-50 dark:bg-gray-800 rounded-xl hover:shadow-lg transition duration-300">
               <div className="flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 text-white mx-auto mb-4 group-hover:scale-110 transition duration-200">
-                <span role="img" aria-label="mentor" className="text-2xl">👨‍🏫</span>
+                <span role="img" aria-label="mentor" className="text-2xl">🧠</span>
               </div>
-              <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3">Find Mentors & Guidance</h4>
+              <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3">Intelligent Mentor Matching</h4>
               <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base">
-                Get personalized guidance for college selection, career paths, and skill development from experts.
+                AI-powered systems identify optimal mentor-student relationships based on goals, personalities, and learning styles.
               </p>
             </div>
 
-            <div className="text-center group p-4 sm:col-span-2 lg:col-span-1">
+            <div className="text-center group p-6 bg-gray-50 dark:bg-gray-800 rounded-xl hover:shadow-lg transition duration-300 sm:col-span-2 lg:col-span-1">
               <div className="flex items-center justify-center h-16 w-16 rounded-xl bg-gradient-to-r from-green-500 to-green-600 dark:from-green-400 dark:to-green-500 text-white mx-auto mb-4 group-hover:scale-110 transition duration-200">
-                <span role="img" aria-label="opportunities" className="text-2xl">🚀</span>
+                <span role="img" aria-label="growth" className="text-2xl">🚀</span>
               </div>
-              <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3">Discover Opportunities</h4>
+              <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3">Adaptive Learning Pathways</h4>
               <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base">
-                Find internships, entry-level opportunities, and get recommendations for admissions and jobs.
+                Dynamic educational routes that evolve based on peer interactions, mentor feedback, and individual progress patterns.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Who Can Join Section */}
+      {/* Future of Education Section */}
       <div className="bg-gray-50 dark:bg-gray-800 py-12 sm:py-16 transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center">
+            <div>
+              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                Reimagining Education for the Digital Generation
+              </h3>
+              <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
+                Traditional education models weren't designed for today's interconnected world. We're building the infrastructure that enables a new paradigm—one where learning is collaborative, mentorship is accessible, and teens are empowered to direct their own growth.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <div className="h-6 w-6 bg-blue-600 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm">✓</span>
+                    </div>
+                  </div>
+                  <div className="ml-3">
+                    <h4 className="text-lg font-medium text-gray-900 dark:text-white">Peer-First Learning</h4>
+                    <p className="text-gray-600 dark:text-gray-400">Students learn best from those slightly ahead of them in the journey</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <div className="h-6 w-6 bg-purple-600 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm">✓</span>
+                    </div>
+                  </div>
+                  <div className="ml-3">
+                    <h4 className="text-lg font-medium text-gray-900 dark:text-white">Distributed Mentorship</h4>
+                    <p className="text-gray-600 dark:text-gray-400">Access to diverse mentors regardless of geographic or socioeconomic boundaries</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <div className="h-6 w-6 bg-green-600 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm">✓</span>
+                    </div>
+                  </div>
+                  <div className="ml-3">
+                    <h4 className="text-lg font-medium text-gray-900 dark:text-white">Personalized Networks</h4>
+                    <p className="text-gray-600 dark:text-gray-400">Custom learning communities that adapt to individual goals and interests</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-8 lg:mt-0">
+              <div className="bg-white dark:bg-gray-700 rounded-lg p-6 shadow-lg">
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Platform Metrics</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">500K+</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Learning Connections</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">25K+</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Active Mentors</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600 dark:text-green-400">150+</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Countries</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">98%</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Satisfaction Rate</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Network Effects Section */}
+      <div className="bg-white dark:bg-gray-900 py-12 sm:py-16 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              Who's Part of Our Community?
+              Powered by Network Effects
             </h3>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              A diverse professional network designed for young minds
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+              Every new member strengthens the entire network, creating exponential value for all participants
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white dark:bg-gray-700 rounded-lg p-6 text-center shadow-md">
-              <div className="text-3xl mb-3">🎓</div>
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Students (Ages 10-18)</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Build profiles, connect with mentors, and explore career paths</p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+            <div className="p-6">
+              <div className="text-4xl mb-3">👥</div>
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Students</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Learn collaboratively and teach others</p>
             </div>
             
-            <div className="bg-white dark:bg-gray-700 rounded-lg p-6 text-center shadow-md">
-              <div className="text-3xl mb-3">👨‍🏫</div>
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Teachers & Mentors</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Share expertise, guide students, and create educational content</p>
+            <div className="p-6">
+              <div className="text-4xl mb-3">🧑‍🏫</div>
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Mentors</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Guide and inspire the next generation</p>
             </div>
             
-            <div className="bg-white dark:bg-gray-700 rounded-lg p-6 text-center shadow-md">
-              <div className="text-3xl mb-3">🏫</div>
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Schools & Universities</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Connect with students, share updates, and build institutional presence</p>
+            <div className="p-6">
+              <div className="text-4xl mb-3">🏫</div>
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Institutions</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Extend reach and impact beyond walls</p>
             </div>
             
-            <div className="bg-white dark:bg-gray-700 rounded-lg p-6 text-center shadow-md">
-              <div className="text-3xl mb-3">🏢</div>
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">EdTech & Businesses</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Offer learning opportunities and connect with future talent</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Platform Stats */}
-      <div className="bg-white dark:bg-gray-900 py-12 sm:py-16 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              Growing Professional Network
-            </h3>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              Join thousands building their career foundation
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">25,000+</div>
-              <div className="text-gray-600 dark:text-gray-400">Students Connected</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">2,500+</div>
-              <div className="text-gray-600 dark:text-gray-400">Verified Mentors</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">850+</div>
-              <div className="text-gray-600 dark:text-gray-400">Educational Institutions</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">15,000+</div>
-              <div className="text-gray-600 dark:text-gray-400">Career Connections Made</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Key Benefits Section */}
-      <div className="bg-gray-50 dark:bg-gray-800 py-12 sm:py-16 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              Why Start Your Professional Journey Early?
-            </h3>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-blue-600 dark:text-blue-400 font-bold text-lg">1</span>
-              </div>
-              <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Build Career Mindset</h4>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
-                Develop professional thinking and career awareness from an early age through mentor interactions.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-purple-600 dark:text-purple-400 font-bold text-lg">2</span>
-              </div>
-              <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Smart Educational Choices</h4>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
-                Get guidance on college selection, course choices, and admission processes from experienced professionals.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-green-600 dark:text-green-400 font-bold text-lg">3</span>
-              </div>
-              <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Early Opportunities</h4>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
-                Access internships, entry-level positions, and recommendations that give you a head start in your career.
-              </p>
+            <div className="p-6">
+              <div className="text-4xl mb-3">🌍</div>
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Community</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Collective intelligence and support</p>
             </div>
           </div>
         </div>
@@ -220,19 +231,19 @@ const Homepage = () => {
       <div className="bg-blue-900 dark:bg-gray-900 py-12 sm:py-16 transition-colors duration-300">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-            Ready to build your professional future?
+            Ready to build the future of education?
           </h3>
           <p className="text-lg sm:text-xl text-blue-200 dark:text-gray-300 mb-8">
-            Join the professional networking platform designed specifically for students aged 10-18. Connect with mentors, explore career paths, and build the foundation for your professional success.
+            Join the infrastructure layer that's empowering the next generation of learners, mentors, and educational innovators. Together, we're creating a world where every teen has access to peer-led learning and mentor-driven growth.
           </p>
           <button
             onClick={() => handleShowAuth('register')}
-            className="bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600 text-blue-900 dark:text-gray-900 font-bold py-4 px-8 rounded-lg text-lg transition duration-200 transform hover:scale-105"
+            className="bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600 text-blue-900 dark:text-gray-900 font-bold py-4 px-8 rounded-lg text-lg transition duration-200 transform hover:scale-105 mb-4"
           >
-            Join ScholarConnect Today
+            Be Part of the Infrastructure
           </button>
-          <p className="text-blue-200 dark:text-gray-400 text-sm mt-4">
-            Parental supervision required for users under 16
+          <p className="text-blue-200 dark:text-gray-400 text-sm">
+            Safe, secure, and designed specifically for teen learners • Ages 10-18
           </p>
         </div>
       </div>
@@ -248,7 +259,7 @@ const Homepage = () => {
               <span className="ml-2 text-xl font-bold">ScholarConnect</span>
             </div>
             <div className="text-gray-400 dark:text-gray-500 text-center">
-              © 2025 ScholarConnect. Professional networking for the next generation.
+              © 2025 ScholarConnect. Building the infrastructure for peer-led, mentor-driven education.
             </div>
           </div>
         </div>

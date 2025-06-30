@@ -14,11 +14,24 @@ const AuthModal = ({ mode: initialMode, onClose, onSuccess, onModeChange }) => {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
+  // Dynamic redirect URL function
   const getRedirectUrl = () => {
-    if (window.location.hostname === 'localhost') {
-      return 'http://localhost:3000';
+    // Priority 1: Use environment variable if set
+    if (process.env.REACT_APP_SITE_URL) {
+      console.log('Using REACT_APP_SITE_URL:', process.env.REACT_APP_SITE_URL);
+      return process.env.REACT_APP_SITE_URL;
     }
-    return window.location.origin;
+    
+    // Priority 2: Use current window location
+    if (typeof window !== 'undefined') {
+      const currentUrl = window.location.origin;
+      console.log('Using window.location.origin:', currentUrl);
+      return currentUrl;
+    }
+    
+    // Priority 3: Fallback
+    console.log('Using fallback URL');
+    return 'http://localhost:3000';
   };
 
   const switchMode = () => {
@@ -33,7 +46,6 @@ const AuthModal = ({ mode: initialMode, onClose, onSuccess, onModeChange }) => {
       password: '',
       confirmPassword: ''
     });
-    // Notify parent component of mode change
     onModeChange?.(newMode);
   };
 
@@ -44,7 +56,7 @@ const AuthModal = ({ mode: initialMode, onClose, onSuccess, onModeChange }) => {
     setFormData({
       firstName: '',
       lastName: '',
-      email: formData.email, // Keep email for convenience
+      email: formData.email,
       password: '',
       confirmPassword: ''
     });
@@ -72,6 +84,9 @@ const AuthModal = ({ mode: initialMode, onClose, onSuccess, onModeChange }) => {
           password: formData.password,
         });
       } else {
+        const redirectUrl = getRedirectUrl();
+        console.log('Signup with redirect URL:', redirectUrl);
+        
         result = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
@@ -80,7 +95,7 @@ const AuthModal = ({ mode: initialMode, onClose, onSuccess, onModeChange }) => {
               first_name: formData.firstName,
               last_name: formData.lastName,
             },
-            emailRedirectTo: getRedirectUrl()
+            emailRedirectTo: redirectUrl
           }
         });
       }

@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Homepage from './components/Homepage';
 import Dashboard from './components/Dashboard';
 import ProfileDetailsForm from './components/ProfileDetailsForm';
+import EmailVerification from './components/EmailVerification';
 import { supabase } from './lib/supabase';
 import './index.css';
 
@@ -11,14 +12,31 @@ const AppContent = () => {
   const { user, loading } = useAuth();
   const [userProfile, setUserProfile] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [currentRoute, setCurrentRoute] = useState(window.location.pathname);
+
+  useEffect(() => {
+    // Handle route changes
+    const handleRouteChange = () => {
+      setCurrentRoute(window.location.pathname);
+    };
+
+    window.addEventListener('popstate', handleRouteChange);
+    return () => window.removeEventListener('popstate', handleRouteChange);
+  }, []);
 
   useEffect(() => {
     if (user) {
       fetchUserProfile();
     } else {
+      setUserProfile(null);
       setProfileLoading(false);
     }
   }, [user]);
+
+  // Handle email verification route
+  if (currentRoute === '/verify' || window.location.search.includes('token')) {
+    return <EmailVerification />;
+  }
 
   const fetchUserProfile = async () => {
     try {
@@ -31,7 +49,6 @@ const AppContent = () => {
       if (data) {
         setUserProfile(data);
       } else if (error && error.code === 'PGRST116') {
-        // Profile doesn't exist, create one
         await createUserProfile();
       }
     } catch (error) {
@@ -70,7 +87,7 @@ const AppContent = () => {
     setUserProfile({ profile_completed: true });
   };
 
-  if (loading || profileLoading) {
+  if (loading || (user && profileLoading)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
@@ -81,17 +98,14 @@ const AppContent = () => {
     );
   }
 
-  // Show homepage for non-authenticated users
   if (!user) {
     return <Homepage />;
   }
 
-  // Show profile details form ONLY if user hasn't completed their profile
   if (user && userProfile && !userProfile.profile_completed) {
     return <ProfileDetailsForm onComplete={handleProfileComplete} />;
   }
 
-  // Show dashboard for authenticated users with completed profiles
   return <Dashboard />;
 };
 
@@ -99,7 +113,7 @@ function App() {
   return (
     <DarkModeProvider>
       <AuthProvider>
-        <div className="App">
+        <div className="App overscroll-none">
           <AppContent />
         </div>
       </AuthProvider>
